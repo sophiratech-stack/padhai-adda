@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /Admin
+Disallow: /Admin.html
+
+Sitemap: https://padhai-adda.operates-on.workers.dev/sitemap.xml

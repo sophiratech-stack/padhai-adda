@@ -1,0 +1,22 @@
+# Cloudflare Pages response headers
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(self), camera=(), microphone=()
+
+# Admin page: keep it out of Google
+/Admin
+  X-Robots-Tag: noindex, nofollow, noarchive
+/Admin.html
+  X-Robots-Tag: noindex, nofollow, noarchive
+
+# Location files: browsers re-check every 10 minutes, so edits show up quickly
+/locations/*
+  Cache-Control: public, max-age=600
+/lists.js
+  Cache-Control: public, max-age=600
+
+# Images and icons
+/assets/*
+  Cache-Control: public, max-age=2592000

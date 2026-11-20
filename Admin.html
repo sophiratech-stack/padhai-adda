@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon.png">
+<link rel="icon" href="/assets/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/site.webmanifest">
+<meta name="theme-color" content="#0d0d0d">
+<title>Padhai Adda – Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cal+Sans&display=swap" rel="stylesheet">
+<style>
+:root{--p:#e9e9e9;--w:#fff;--k:#0d0d0d;--g:#555;--l:#bdbdbd}
+*{box-sizing:border-box;margin:0}
+body{font:400 16px/1.5 'Cal Sans',system-ui,sans-serif;font-synthesis:none;color:var(--k);background-color:var(--p);background-image:radial-gradient(#b4b4b4 1px,transparent 1.3px);background-size:22px 22px}
+h1,h2,h3,b,th,dt{font-weight:400}
+h1{font-size:clamp(1.8rem,4vw,2.8rem);line-height:1.05;letter-spacing:-.02em}h2{font-size:1.25rem;margin-bottom:.9rem;padding-bottom:.4rem;border-bottom:2px solid var(--k)}
+p,dd{color:var(--g)}
+:focus-visible{outline:3px solid var(--k);outline-offset:3px}.top :focus-visible,.tabbar :focus-visible,.login :focus-visible,.hk :focus-visible{outline-color:#fff}
+
+/* Shell: top bar, tab bar (bottom bar on phones), content */
+.app{min-height:100vh;display:flex;flex-direction:column}
+.top{position:sticky;top:0;height:64px;z-index:30;background:var(--w);border-bottom:3px solid var(--k);display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 clamp(.8rem,3vw,2rem)}
+.logo{display:flex;align-items:center;gap:.7rem;font-size:1.3rem;white-space:nowrap}.logo i{font-style:normal;background:var(--k);color:#fff;width:38px;height:38px;display:grid;place-items:center;transform:rotate(-6deg)}
+.tabbar{position:sticky;top:64px;z-index:29;background:var(--k)}
+.tabs{display:flex;gap:.3rem;max-width:1240px;margin:0 auto;padding:.55rem clamp(.8rem,3vw,2rem) 0}
+.tabs a{padding:.6rem 1.4rem;text-decoration:none;color:#bdbdbd;border-radius:14px 14px 0 0}.tabs a:hover{color:#fff}.tabs a.on{background:var(--p);color:var(--k)}
+main{flex:1;width:100%;max-width:1240px;margin:0 auto;padding:clamp(1rem,3vw,2rem)}
+.ph{display:flex;justify-content:space-between;align-items:flex-end;gap:1rem;flex-wrap:wrap;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:3px solid var(--k)}.ph p{margin-top:.3rem}
+
+/* Controls */
+.btn{display:inline-block;padding:.55rem 1.1rem;border:2px solid var(--k);background:var(--k);color:#fff;font:inherit;cursor:pointer;text-decoration:none;text-align:center;box-shadow:3px 3px 0 var(--l);transition:transform .1s,box-shadow .1s}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--g)}.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--l)}
+.btn.alt{background:var(--w);color:var(--k);box-shadow:3px 3px 0 var(--k)}.btn.sm{padding:.15rem .7rem;font-size:.9rem;box-shadow:2px 2px 0 var(--k)}.btn:disabled{opacity:.5;pointer-events:none}
+.acts{display:flex;gap:.7rem;flex-wrap:wrap}
+.card{background:var(--w);border:2px solid var(--k);padding:1.1rem;min-width:0}
+.pill{border:1.5px solid var(--k);border-radius:99px;padding:0 .65rem;font-size:.82rem}.pill.on{background:var(--k);color:#fff}
+.demo{background:var(--k);color:#fff;padding:.6rem 1rem;margin-bottom:1.5rem;font-size:.92rem}code{background:#fff;color:#000;padding:0 .3rem}
+
+/* Data tables (become stacked record cards on phones) */
+.tw{overflow-x:auto;background:var(--w);border:2px solid var(--k)}table{border-collapse:collapse;width:100%;min-width:640px}
+th,td{text-align:left;padding:.7rem .9rem;border-bottom:1px solid var(--l);font-size:.93rem;vertical-align:middle}th{background:var(--k);color:#fff;white-space:nowrap}td.a{white-space:nowrap;text-align:right}th:last-child.a{text-align:right}
+tbody tr:hover{background:var(--p)}tbody tr:last-child td{border-bottom:0}.id{color:var(--g);white-space:nowrap}
+
+/* Dashboard */
+.dash{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:1rem}
+.s3{grid-column:span 3}.s4{grid-column:span 4}.s5{grid-column:span 5}.s6{grid-column:span 6}.s7{grid-column:span 7}.s8{grid-column:span 8}.s12{grid-column:span 12}
+.hk{background:var(--k);color:#fff;box-shadow:6px 6px 0 #666;display:flex;flex-direction:column;gap:.8rem}.hk p,.hk small{color:#cfcfcf}
+.big{font-size:clamp(3.2rem,9vw,5.5rem);line-height:.95}
+.split{display:flex;height:22px;border:2px solid #fff;background:repeating-linear-gradient(45deg,#555 0 5px,#333 5px 10px)}.split i{display:block;background:#fff}
+.legend{display:flex;gap:1.2rem;flex-wrap:wrap;font-size:.92rem}
+.tb{display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:.8rem;align-items:end;margin-bottom:.6rem}.cnt{font-size:.9rem;margin:0 0 .8rem}
+.pend{display:flex;flex-direction:column;justify-content:space-between;gap:.8rem;box-shadow:6px 6px 0 var(--k)}.pend .big{font-size:clamp(2.8rem,7vw,4.2rem)}
+.tile h3{font-size:2.2rem;line-height:1}.tile p{margin-top:.3rem;font-size:.9rem}
+.bar{display:grid;grid-template-columns:minmax(70px,120px) 1fr 28px;gap:.6rem;align-items:center;margin:.55rem 0;font-size:.9rem}.bar span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar i{display:block;height:16px;background:repeating-linear-gradient(45deg,#0d0d0d 0 5px,#4a4a4a 5px 10px)}
+.dn{display:flex;gap:1.4rem;align-items:center;flex-wrap:wrap}.ring{width:150px;height:150px;border-radius:50%;border:2px solid var(--k);position:relative;flex:none}
+.ring::after{content:'';position:absolute;inset:34px;background:var(--w);border-radius:50%;border:2px solid var(--k)}
+.dn ul{list-style:none;padding:0;display:grid;gap:.4rem;font-size:.92rem;flex:1;min-width:150px}.dn li{display:flex;align-items:center;gap:.5rem}.dn li i{width:14px;height:14px;border:1.5px solid var(--k);flex:none}.dn li b{margin-left:auto}
+.cols{display:flex;align-items:stretch;gap:.7rem;height:230px;overflow-x:auto;padding-bottom:.3rem}
+.col{flex:1 0 58px;display:flex;flex-direction:column;align-items:center;text-align:center;font-size:.78rem;gap:.2rem;min-width:0}
+.cb{flex:1;width:70%;display:flex;align-items:flex-end;min-height:0;border-bottom:2px solid var(--k)}.cb i{display:block;width:100%;background:repeating-linear-gradient(45deg,#0d0d0d 0 5px,#4a4a4a 5px 10px)}
+.col span{width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.feed{list-style:none;padding:0}.feed li{display:flex;justify-content:space-between;gap:1rem;padding:.6rem 0;border-bottom:1px dashed var(--l)}.feed li:last-child{border:0}.feed small{display:block;color:var(--g)}
+.qa{display:grid;gap:.8rem}.qa .btn{width:100%}
+
+/* Forms, dropdowns, modal, toast, login */
+.fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.9rem}.f label{display:block;margin-bottom:.3rem;font-size:.92rem}.f.w{grid-column:1/-1}
+input,textarea{width:100%;padding:.6rem .8rem;border:2px solid var(--k);border-radius:0;font:inherit;background:var(--w);color:var(--k)}textarea{min-height:90px;resize:vertical}
+.dd{position:relative}.dd-b{width:100%;text-align:left;padding:.6rem .8rem;border:2px solid var(--k);background:var(--w);font:inherit;cursor:pointer;display:flex;justify-content:space-between;gap:.5rem;color:var(--k)}
+.dd-b span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dd-p{position:absolute;z-index:60;left:0;right:0;top:100%;background:var(--w);border:2px solid var(--k);border-top:0;max-height:220px;overflow:auto;display:none;box-shadow:5px 5px 0 var(--k)}
+.dd.o .dd-p{display:block}.dd-p label{display:flex;gap:.6rem;padding:.5rem .8rem;cursor:pointer;margin:0}.dd-p label:hover{background:var(--p)}.dd-p input{width:auto;accent-color:#000}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:50;display:grid;place-items:center;padding:1rem;overflow:auto}
+.md{background:var(--w);border:3px solid var(--k);box-shadow:8px 8px 0 #666;padding:1.3rem;width:100%;max-width:780px;max-height:92vh;overflow:auto}.md h2{margin-bottom:1rem}
+dl{display:grid;grid-template-columns:170px 1fr;gap:.5rem .8rem}dd{overflow-wrap:anywhere}dt{color:var(--k)}
+.toast{position:fixed;bottom:1rem;left:50%;transform:translateX(-50%);background:var(--k);color:#fff;padding:.7rem 1.2rem;z-index:90;max-width:90vw;border:2px solid #fff}
+.login{position:fixed;inset:0;background:var(--k);display:grid;place-items:center;padding:1rem;z-index:100}
+.login .card{max-width:390px;width:100%;box-shadow:8px 8px 0 #666;border-color:#fff}.login input{margin:.9rem 0}.login .btn{width:100%}
+
+@media(max-width:1000px){.tb{grid-template-columns:1fr 1fr}.tb .btn{grid-column:1/-1}.s3{grid-column:span 6}.s4,.s5,.s6,.s7,.s8{grid-column:span 12}}
+@media(max-width:720px){
+  body{padding-bottom:64px}
+  .tabbar{position:fixed;top:auto;bottom:0;left:0;right:0;background:var(--w);border-top:3px solid var(--k)}
+  .tabs{padding:0;max-width:none;gap:0}.tabs a{flex:1;text-align:center;border-radius:0;padding:.95rem .2rem;color:var(--g);font-size:.88rem}.tabs a.on{background:var(--k);color:#fff}
+  .toast{bottom:5rem}
+  .ph .acts{width:100%}.ph .acts .btn{flex:1}
+  dl{grid-template-columns:1fr;gap:0}dt{margin-top:.6rem}
+  .s3{grid-column:span 6}
+}
+@media(max-width:560px){.tb{grid-template-columns:1fr}}
+@media(max-width:380px){.s3{grid-column:span 12}}
+</style>
+</head>
+<body>
+<div class="login" id="login"><form class="card" id="lf"><h2>Padhai Adda Admin</h2><p id="lh">Enter the admin password to continue.</p>
+<input type="password" id="pw" autocomplete="current-password" aria-label="Password"><button type="submit" class="btn">Sign in</button><p id="le" style="margin-top:.7rem"></p></form></div>
+
+<div class="app">
+  <header class="top"><div class="logo"><i>P</i>Padhai Adda Admin</div><button type="button" class="btn alt sm" id="out">Sign out</button></header>
+  <div class="tabbar"><nav class="tabs" id="nav" aria-label="Admin pages"></nav></div>
+  <main id="main"></main>
+</div>
+
+<script src="/lists.js"></script>
+<script>
+const API = 'PASTE_YOUR_APPS_SCRIPT_URL_HERE';   // the Web app URL from Apps Script (Deploy > Manage deployments)
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+let AUTH = false, CUR = 'dashboard', TOKEN = sessionStorage.getItem('pa_t') || '';
+const FIELDS = ['Teacher ID', 'Name', 'Contact', 'Qualifications', 'State', 'City', 'Zone/Sector/Village', 'Classes Taught', 'Subjects Taught', 'Fees', 'Teaching Mode', 'Experience', 'Description', 'Status', 'Current Teaching Location', 'Consent', 'Consent Time'];
+
+const SUMMARY = ['Teacher ID', 'Name', 'State', 'City', 'Zone/Sector/Village'];
+/* STATES, OPTIONS and the city/area loader come from lists.js */
+async function api(action, p = {}) {
+  let r, j;
+  // text/plain keeps this a "simple" request, which Apps Script accepts from any website
+  try { r = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action, token: TOKEN, ...p }) }); }
+  catch (e) { throw new Error('Cannot reach the server. Check your internet connection and try again.'); }
+  try { j = await r.json(); } catch (e) { throw new Error('The server returned an unexpected response. Please try again.'); }
+  if (!j.ok) { if (j.error === 'Not signed in') signOut(); throw new Error(j.error); }
+  return j.data;
+}
+
+/* ----- UI helpers ----- */
+function toast(t) { const e = document.createElement('div'); e.className = 'toast'; e.textContent = t; document.body.append(e); setTimeout(() => e.remove(), 3200); }
+const done = async (fn, ok) => { try { await fn(); ok && toast(ok); } catch (e) { toast(e.message); } };
+function dd(host, o) {
+  let items = o.items || [], off = false, loading = false; const sel = new Set();
+  host.classList.add('dd'); host.innerHTML = '<button type="button" class="dd-b"><span></span><i>▾</i></button><div class="dd-p"></div>';
+  const btn = host.querySelector('.dd-b'), lab = host.querySelector('span'), p = host.querySelector('.dd-p');
+  const apply = () => { btn.disabled = off || loading; if (btn.disabled) host.classList.remove('o'); };
+  const draw = () => {
+    p.innerHTML = (items.length ? items.map((v, i) => `<label><input type="checkbox" data-i="${i}" ${sel.has(v) ? 'checked' : ''}> ${esc(v)}</label>`).join('') : '<label>No options available</label>');
+    lab.textContent = loading ? 'Loading…' : !sel.size ? (o.ph || 'Select') : sel.size < 3 ? [...sel].join(', ') : sel.size + ' selected';
+  };
+  p.onchange = e => {
+    const i = e.target;
+    if (o.single) { const v = items[i.dataset.i], same = sel.has(v); host.classList.remove('o'); if (same) { draw(); return; } sel.clear(); sel.add(v); }
+    else i.checked ? sel.add(items[i.dataset.i]) : sel.delete(items[i.dataset.i]);
+    draw(); o.on && o.on();
+  };
+  btn.onclick = () => { $$('.dd.o').forEach(x => x !== host && x.classList.remove('o')); host.classList.toggle('o'); };
+  draw();
+  return { get: () => [...sel], clear() { sel.clear(); draw(); },
+    disable(v) { off = v; apply(); },
+    busy(v) { loading = v; apply(); draw(); },
+    set(a) { items = a; [...sel].forEach(v => !items.includes(v) && sel.delete(v)); draw(); },
+    put(a, fire) { sel.clear(); a.forEach(v => sel.add(v)); draw(); fire && o.on && o.on(); } };
+}
+document.addEventListener('click', e => { if (!e.target.closest('.dd')) $$('.dd.o').forEach(x => x.classList.remove('o')); });
+/* State -> City -> Zone: choosing a state loads only that state's cities and areas. */
+function cascade(h, onError) {
+  const u = a => [...new Set(a)].sort(); let S, C, Z, L = [], tok = 0; const g = d => d.get();
+  const cs = () => u(L.map(r => r[0]));
+  const zs = () => u(L.filter(r => g(C).includes(r[0])).map(r => r[1]));
+  const lock = () => { C.disable(!g(S).length); Z.disable(!g(C).length); };
+  const pick = async () => {
+    C.clear(); Z.clear(); L = []; C.set([]); Z.set([]); lock();
+    const st = g(S)[0]; if (!st) return;
+    const mine = ++tok; C.busy(true);
+    try { const rows = await stateLocations(st); if (mine !== tok) return; L = rows; C.set(cs()); }
+    catch (e) { if (mine === tok) onError && onError(e); }
+    if (mine === tok) { C.busy(false); lock(); }
+  };
+  S = dd(h[0], { items: STATES, single: true, ph: 'Select state', on: pick });
+  C = dd(h[1], { items: [], single: true, ph: 'Select city', on: () => { Z.clear(); Z.set(zs()); lock(); } });
+  Z = dd(h[2], { items: [], single: true, ph: 'Select zone / sector / village' });
+  lock();
+  const r = [S, C, Z];
+  r.fill = async (st, ci, zo) => {   // used when editing: select state, load it, then restore city and area
+    S.put([st]); await pick();
+    C.put([ci]); Z.set(zs()); Z.put([zo]); lock();
+  };
+  return r;
+}
+function modal(title, html) {
+  const o = document.createElement('div'); o.className = 'ov';
+  o.innerHTML = `<div class="md" role="dialog" aria-label="${esc(title)}"><h2>${esc(title)}</h2>${html}</div>`;
+  o.onclick = e => { if (e.target === o) o.remove(); }; document.body.append(o); return o;
+}
+const hbars = m => { const e = Object.entries(m).sort((a, b) => b[1] - a[1]).slice(0, 8), mx = Math.max(1, ...e.map(x => x[1]));
+  return e.length ? e.map(([k, v]) => `<div class="bar"><span title="${esc(k)}">${esc(k)}</span><i style="width:${v / mx * 100}%"></i><b>${v}</b></div>`).join('') : '<p>No data yet.</p>'; };
+const vcols = m => { const e = Object.entries(m).sort((a, b) => b[1] - a[1]).slice(0, 10), mx = Math.max(1, ...e.map(x => x[1]));
+  return e.length ? `<div class="cols">${e.map(([k, v]) => `<div class="col"><div class="cb"><i style="height:${v / mx * 100}%"></i></div><b>${v}</b><span title="${esc(k)}">${esc(k)}</span></div>`).join('')}</div>` : '<p>No data yet.</p>'; };
+const donut = m => { const e = Object.entries(m).sort((a, b) => b[1] - a[1]).slice(0, 5), t = e.reduce((s, x) => s + x[1], 0);
+  if (!t) return '<p>No data yet.</p>';
+  const sh = ['#0d0d0d', '#444', '#777', '#aaa', '#d6d6d6']; let a = 0;
+  const seg = e.map(([k, v], i) => { const s = a; a += v / t * 100; return `${sh[i]} ${s}% ${a}%`; });
+  return `<div class="dn"><div class="ring" role="img" aria-label="Teaching modes share" style="background:conic-gradient(${seg.join(',')})"></div><ul>${e.map(([k, v], i) => `<li><i style="background:${sh[i]}"></i>${esc(k)}<b>${v}</b></li>`).join('')}</ul></div>`; };
+/* Table: cols are labels; rows are arrays of ready-made cell HTML. A column named "Actions" is right-aligned. */
+const table = (cols, rows, empty = 'Nothing here yet.') => `<div class="tw"><table><thead><tr>${cols.map(c => `<th${c === 'Actions' ? ' class="a"' : ''}>${c}</th>`).join('')}</tr></thead><tbody>${
+  rows.length ? rows.map(r => `<tr>${r.map((c, i) => `<td data-label="${esc(cols[i])}"${cols[i] === 'Actions' ? ' class="a"' : ''}>${c}</td>`).join('')}</tr>`).join('') : `<tr><td colspan="${cols.length}">${empty}</td></tr>`}</tbody></table></div>`;
+const pageHead = (t, sub, actions = '') => `<div class="ph"><div><h1>${t}</h1><p>${sub}</p></div>${actions ? `<div class="acts">${actions}</div>` : ''}</div>`;
+const SUMCOLS = ['Teacher ID', 'Name', 'State', 'City', 'Zone/Sector/Village'];
+const sumCells = r => [`<span class="id">${esc(r['Teacher ID'])}</span>`, esc(r.Name), esc(r.State), esc(r.City), esc(r['Zone/Sector/Village'])];
+
+/* Lists carry only ID, Name, State, City and Zone. The full record is fetched when View or Edit is pressed. */
+async function fetchFull(action, id, state, city) { try { return await api(action, { id, state, city }); } catch (e) { toast(e.message); return null; } }
+async function viewRecord(action, id, label, state, city) {
+  const r = await fetchFull(action, id, state, city); if (!r) return;
+  modal(label + ' ' + id, `<dl>${FIELDS.map(f => `<dt>${f}</dt><dd>${esc(r[f])}</dd>`).join('')}</dl><div class="acts" style="margin-top:1.2rem"><button type="button" class="btn alt" onclick="this.closest('.ov').remove()">Close</button></div>`);
+}
+
+/* ----- Teacher form (add / edit) ----- */
+async function teacherForm(t, after) {
+  t = t || {};
+  const m = modal(t['Teacher ID'] ? 'Edit teacher' : 'Add teacher', `<div class="fg">
+<div class="f"><label>Name</label><input id="n" maxlength="80"></div><div class="f"><label>Contact (10 digits)</label><input id="c" inputmode="numeric" maxlength="10"></div>
+<div class="f"><label>Qualifications</label><div id="q"></div></div><div class="f"><label>State</label><div id="s"></div></div>
+<div class="f"><label>City</label><div id="ci"></div></div><div class="f"><label>Zone / Sector / Village</label><div id="z"></div></div>
+<div class="f"><label>Classes Taught</label><div id="k"></div></div><div class="f"><label>Subjects Taught</label><div id="u"></div></div>
+<div class="f"><label>Fees (₹/month)</label><input id="fe" type="number" min="0"></div><div class="f"><label>Teaching Mode</label><div id="tm"></div></div>
+<div class="f"><label>Experience (years)</label><input id="ex" type="number" min="0" step="0.5"></div><div class="f"><label>Status</label><div id="st"></div></div>
+<div class="f w"><label>Current Teaching Location (latitude,longitude)</label><input id="lo" placeholder="28.6692,77.4538"></div>
+<div class="f w"><label>Description</label><textarea id="de" maxlength="500"></textarea></div></div>
+${t['Teacher ID'] ? '' : '<label style="display:flex;gap:.6rem;align-items:flex-start;margin-top:1rem;cursor:pointer"><input type="checkbox" id="cs" style="width:auto;flex:none;margin-top:.3rem"><span>This tutor has given consent to be listed and to have their details shown publicly (see the Privacy Policy).</span></label>'}
+<p id="er" style="margin-top:.6rem;color:#000"></p><div class="acts" style="margin-top:1rem"><button type="button" class="btn" id="sv">Save teacher</button><button type="button" class="btn alt" id="cx">Cancel</button></div>`);
+  const q = x => m.querySelector(x);
+  const cas = cascade([q('#s'), q('#ci'), q('#z')], e => { q('#er').textContent = 'Could not load cities and areas: ' + e.message; }), [S, C, Z] = cas;
+  const Q = dd(q('#q'), { items: OPTIONS.qualifications, ph: 'Select' }), K = dd(q('#k'), { items: OPTIONS.classes }), U = dd(q('#u'), { items: OPTIONS.subjects });
+  const M = dd(q('#tm'), { items: OPTIONS.modes }), T = dd(q('#st'), { items: ['Active', 'Inactive'], single: true, ph: 'Select status' });
+  const sp = v => String(v || '').split(',').map(x => x.trim()).filter(Boolean);
+  q('#n').value = t.Name || ''; q('#c').value = t.Contact || ''; q('#fe').value = t.Fees ?? ''; q('#ex').value = t.Experience ?? '';
+  q('#lo').value = t['Current Teaching Location'] || ''; q('#de').value = t.Description || '';
+  Q.put(sp(t.Qualifications)); K.put(sp(t['Classes Taught'])); U.put(sp(t['Subjects Taught'])); M.put(sp(t['Teaching Mode'])); if (t.Status) T.put([t.Status]);   // new teachers start on "Select status"
+  if (t.State) cas.fill(t.State, t.City, t['Zone/Sector/Village']);
+  q('#c').oninput = e => e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10);
+  q('#cx').onclick = () => m.remove();
+  q('#sv').onclick = async () => {
+    const d = { 'Teacher ID': t['Teacher ID'] || '', Name: q('#n').value, Contact: q('#c').value, Qualifications: Q.get(), State: S.get()[0], City: C.get()[0], 'Zone/Sector/Village': Z.get()[0],
+      'Classes Taught': K.get(), 'Subjects Taught': U.get(), Fees: q('#fe').value, 'Teaching Mode': M.get(), Experience: q('#ex').value, Description: q('#de').value,
+      Status: T.get()[0], 'Current Teaching Location': q('#lo').value };
+    if (!t['Teacher ID']) { if (!q('#cs').checked) return q('#er').textContent = 'Confirm that the tutor has given consent.'; d.Consent = 'Yes'; }
+    try { await api('saveTeacher', { data: d }); m.remove(); toast('Teacher saved'); after(); } catch (e) { q('#er').textContent = e.message; }
+  };
+}
+
+/* ----- Pages ----- */
+/* ----- CSV reading, state names, location files and ZIP making (all done inside your browser) ----- */
+function parseCSV(text) {
+  text = text.replace(/^\uFEFF/, ''); const rows = []; let row = [], cur = '', q = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (q) { if (ch === '"') { if (text[i + 1] === '"') { cur += '"'; i++; } else q = false; } else cur += ch; }
+    else if (ch === '"') q = true;
+    else if (ch === ',') { row.push(cur); cur = ''; }
+    else if (ch === '\n' || ch === '\r') { if (ch === '\r' && text[i + 1] === '\n') i++; row.push(cur); cur = ''; rows.push(row); row = []; }
+    else cur += ch;
+  }
+  if (cur !== '' || row.length) { row.push(cur); rows.push(row); }
+  return rows.filter(r => r.some(c => c.trim() !== ''));
+}
+const STATE_ALIASES = { 'nct of delhi': 'Delhi', 'new delhi': 'Delhi', 'orissa': 'Odisha', 'uttaranchal': 'Uttarakhand', 'pondicherry': 'Puducherry', 'jammu & kashmir': 'Jammu and Kashmir',
+  'andaman & nicobar islands': 'Andaman and Nicobar Islands', 'andaman and nicobar': 'Andaman and Nicobar Islands', 'dadra and nagar haveli': 'Dadra and Nagar Haveli and Daman and Diu',
+  'daman and diu': 'Dadra and Nagar Haveli and Daman and Diu', 'daman & diu': 'Dadra and Nagar Haveli and Daman and Diu', 'dadra & nagar haveli': 'Dadra and Nagar Haveli and Daman and Diu' };
+function matchState(s) {
+  const k = String(s || '').toLowerCase().replace(/\s+/g, ' ').trim(); if (!k) return null;
+  return STATES.find(x => x.toLowerCase() === k) || STATES.find(x => x.toLowerCase() === k.replace(/ & /g, ' and ')) || STATE_ALIASES[k] || null;
+}
+function stateFileText(state, data) {
+  const q = JSON.stringify;
+  return `/* ===== ${state} =====
+   HOW TO EDIT THIS FILE (no coding needed)
+   - One line per city:   "City name": ["Area 1", "Area 2", "Area 3"],
+   - To add an area: type a comma after the last area and add "New area" inside the [ ] brackets.
+   - To add a city: copy a whole city line, paste it below, then change the names.
+   - Always keep names inside double quotes "like this" and keep commas between items.
+   - Save the file and upload it again to Cloudflare Pages (same name, same folder).
+   TIP: the admin page has a "Locations tool" that builds all these files from one CSV file. */
+LOCATIONS[${q(state)}] = {\n${Object.keys(data).map(c => `  ${q(c)}: [${data[c].map(q).join(', ')}]`).join(',\n')}\n};\n`;
+}
+function crc32(bytes) {
+  if (!crc32.t) { crc32.t = []; for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; crc32.t[n] = c >>> 0; } }
+  let crc = -1; for (const b of bytes) crc = crc32.t[(crc ^ b) & 255] ^ (crc >>> 8); return (crc ^ -1) >>> 0;
+}
+function makeZip(files) {   // files: [{ name, text }] -> Blob (a plain, uncompressed ZIP)
+  const enc = new TextEncoder(), parts = [], central = []; let offset = 0;
+  const d = new Date(), time = (d.getHours() << 11) | (d.getMinutes() << 5) | (d.getSeconds() >> 1), date = ((d.getFullYear() - 1980) << 9) | ((d.getMonth() + 1) << 5) | d.getDate();
+  for (const f of files) {
+    const name = enc.encode(f.name), data = enc.encode(f.text), crc = crc32(data);
+    const lh = new DataView(new ArrayBuffer(30));
+    lh.setUint32(0, 0x04034b50, true); lh.setUint16(4, 20, true); lh.setUint16(6, 0x0800, true); lh.setUint16(10, time, true); lh.setUint16(12, date, true);
+    lh.setUint32(14, crc, true); lh.setUint32(18, data.length, true); lh.setUint32(22, data.length, true); lh.setUint16(26, name.length, true);
+    parts.push(lh.buffer, name, data);
+    const ch = new DataView(new ArrayBuffer(46));
+    ch.setUint32(0, 0x02014b50, true); ch.setUint16(4, 20, true); ch.setUint16(6, 20, true); ch.setUint16(8, 0x0800, true); ch.setUint16(12, time, true); ch.setUint16(14, date, true);
+    ch.setUint32(16, crc, true); ch.setUint32(20, data.length, true); ch.setUint32(24, data.length, true); ch.setUint16(28, name.length, true); ch.setUint32(42, offset, true);
+    central.push(ch.buffer, name);
+    offset += 30 + name.length + data.length;
+  }
+  const size = central.reduce((a, b) => a + b.byteLength, 0), end = new DataView(new ArrayBuffer(22));
+  end.setUint32(0, 0x06054b50, true); end.setUint16(8, files.length, true); end.setUint16(10, files.length, true); end.setUint32(12, size, true); end.setUint32(16, offset, true);
+  return new Blob([...parts, ...central, end.buffer], { type: 'application/zip' });
+}
+const NAV = [['dashboard', 'Dashboard'], ['teachers', 'Teachers'], ['submissions', 'Submissions'], ['import', 'Import CSV'], ['locations', 'Locations']];
+const PAGES = {
+  async dashboard(el) {
+    const d = await api('dashboard');
+    const pct = d.teachers ? d.active / d.teachers * 100 : 0;
+    el.insertAdjacentHTML('beforeend', pageHead('Dashboard', 'Overview of teachers, pending submissions and coverage.', '<button type="button" class="btn alt" id="cc">Clear cache</button>') + `<div class="dash">
+<div class="card hk s8"><p>Teachers listed</p><div class="big">${d.teachers}</div>
+<div class="split" role="img" aria-label="${d.active} active, ${d.inactive} inactive"><i style="width:${pct}%"></i></div>
+<div class="legend"><span><b>${d.active}</b> Active (shown in search)</span><span><b>${d.inactive}</b> Inactive (hidden)</span></div></div>
+<div class="card pend s4"><div><p>Pending submissions</p><div class="big">${d.submissions}</div></div><button type="button" class="btn" data-go="submissions">Review submissions</button></div>
+<div class="card tile s3"><h3>${d.states}</h3><p>States covered</p></div><div class="card tile s3"><h3>${d.cities}</h3><p>Cities covered</p></div>
+<div class="card tile s3"><h3>${Object.keys(d.bySubject).length}</h3><p>Subjects taught</p></div><div class="card tile s3"><h3>${Object.keys(d.byClass).length}</h3><p>Classes covered</p></div>
+<div class="card s6"><h2>Teachers by city</h2>${hbars(d.byCity)}</div><div class="card s6"><h2>Top subjects</h2>${hbars(d.bySubject)}</div>
+<div class="card s5"><h2>Teaching modes</h2>${donut(d.byMode)}</div><div class="card s7"><h2>Classes covered</h2>${vcols(d.byClass)}</div>
+<div class="card s7"><h2>Latest submissions</h2>${d.recent.length ? `<ul class="feed">${d.recent.map(r => `<li><div>${esc(r.Name)}<small>${esc(r['Zone/Sector/Village'])}, ${esc(r.City)}</small></div><span class="id">${esc(r['Teacher ID'])}</span></li>`).join('')}</ul>` : '<p>No pending submissions.</p>'}</div>
+<div class="card s5"><h2>Quick actions</h2><div class="qa"><button type="button" class="btn" id="qa-add">Add teacher</button><button type="button" class="btn alt" data-go="teachers">View teachers</button><button type="button" class="btn alt" data-go="import">Import CSV</button></div></div></div>`);
+    $('#qa-add').onclick = () => teacherForm(null, () => show(CUR));
+    $('#cc').onclick = () => done(async () => { await api('clearCache'); }, 'Cache cleared. The next search of each state reloads from the sheet.');
+    el.onclick = e => { const b = e.target.closest('[data-go]'); if (b) go(b.dataset.go); };
+  },
+  async teachers(el) {
+    let rows = [];   // loaded when a state is chosen
+    const u = a => [...new Set(a)].sort(), Z0 = 'Zone/Sector/Village';
+    el.insertAdjacentHTML('beforeend', pageHead(`Teachers (${rows.length})`, 'Approved teachers. Choose a state first, then search, filter, or open View for full details.', '<button type="button" class="btn" id="add">Add teacher</button>') +
+      `<div class="card tb"><div class="f"><label for="tq">Search</label><input id="tq" placeholder="Name or Teacher ID" autocomplete="off"></div>
+<div class="f"><label>State</label><div id="fs"></div></div><div class="f"><label>City</label><div id="fc"></div></div><div class="f"><label>Zone / Sector / Village</label><div id="fz"></div></div>
+<button type="button" class="btn alt" id="fx">Clear</button></div><p class="cnt" id="cnt"></p><div id="tt"></div>`);
+    let FS, FC, FZ; const g = d => d.get()[0];
+    const cityItems = () => u(rows.filter(r => !g(FS) || r.State === g(FS)).map(r => r.City));
+    const zoneItems = () => u(rows.filter(r => (!g(FS) || r.State === g(FS)) && (!g(FC) || r.City === g(FC))).map(r => r[Z0]));
+    const drawT = () => {
+      const q = $('#tq').value.trim().toLowerCase();
+      const list = rows.map((r, i) => ({ r, i })).filter(({ r }) => (!q || String(r.Name).toLowerCase().includes(q) || String(r['Teacher ID']).toLowerCase().includes(q)) &&
+        (!g(FS) || r.State === g(FS)) && (!g(FC) || r.City === g(FC)) && (!g(FZ) || r[Z0] === g(FZ)));
+      $('#tt').innerHTML = table([...SUMCOLS, 'Actions'], list.map(({ r, i }) => [...sumCells(r), `<button type="button" class="btn alt sm" data-v="${i}">View</button> <button type="button" class="btn alt sm" data-e="${i}">Edit</button> <button type="button" class="btn alt sm" data-d="${i}">Delete</button>`]),
+        rows.length ? 'No teachers match your search or filters.' : (g(FS) ? 'No teachers in this state yet.' : 'Select a state to see its teachers.'));
+      $('#cnt').textContent = `Showing ${list.length} of ${rows.length} teachers`;
+    };
+    // Choosing a state loads only that state's file from the server; with no state chosen, all states are listed.
+    const load = async () => {
+      try { rows = g(FS) ? await api('teachers', { state: g(FS) }) : []; } catch (e) { return toast(e.message); }
+      el.querySelector('h1').textContent = `Teachers (${rows.length})`;
+      FC.clear(); FZ.clear(); FC.set(cityItems()); FZ.set(zoneItems()); drawT();
+    };
+    FS = dd($('#fs'), { items: STATES, single: true, ph: 'Select a state', on: load });
+    FC = dd($('#fc'), { items: cityItems(), single: true, ph: 'All cities', on: () => { FZ.clear(); FZ.set(zoneItems()); drawT(); } });
+    FZ = dd($('#fz'), { items: zoneItems(), single: true, ph: 'All zones', on: drawT });
+    $('#tq').oninput = drawT;
+    $('#fx').onclick = () => { $('#tq').value = ''; FS.clear(); load(); };
+    drawT();
+    $('#add').onclick = () => teacherForm(null, load);
+    el.onclick = async e => {
+      const b = e.target.closest('button'); if (!b) return; const D = b.dataset;
+      if (D.v) viewRecord('teacher', rows[D.v]['Teacher ID'], 'Teacher', rows[D.v].State, rows[D.v].City);
+      if (D.e) { const t = await fetchFull('teacher', rows[D.e]['Teacher ID'], rows[D.e].State, rows[D.e].City); t && teacherForm(t, load); }
+      if (D.d && confirm('Delete ' + rows[D.d].Name + '? This cannot be undone.')) done(async () => { await api('deleteTeacher', { id: rows[D.d]['Teacher ID'], state: rows[D.d].State, city: rows[D.d].City }); load(); }, 'Teacher deleted');
+    };
+  },
+  async submissions(el) {
+    const rows = await api('submissions');
+    el.insertAdjacentHTML('beforeend', pageHead(`Submissions (${rows.length})`, 'Review tutor listings before they go live.', '<button type="button" class="btn" id="aa">Approve All</button><button type="button" class="btn alt" id="ra">Reject All</button>') +
+      table([...SUMCOLS, 'Actions'], rows.map((r, i) => [...sumCells(r), `<button type="button" class="btn alt sm" data-v="${i}">View</button> <button type="button" class="btn sm" data-a="${i}">Approve</button> <button type="button" class="btn alt sm" data-r="${i}">Reject</button>`])));
+    const re = () => show(CUR);
+    $('#aa').onclick = () => rows.length ? confirm('Approve all ' + rows.length + ' submissions?') && done(async () => { await api('approveAll'); re(); }, 'All submissions approved') : toast('No submissions to approve');
+    $('#ra').onclick = () => rows.length ? confirm('Reject and delete all ' + rows.length + ' submissions?') && done(async () => { await api('rejectAll'); re(); }, 'All submissions rejected') : toast('No submissions to reject');
+    el.onclick = e => {
+      const b = e.target.closest('button'); if (!b) return; const D = b.dataset;
+      if (D.v) viewRecord('submission', rows[D.v]['Teacher ID'], 'Submission', rows[D.v].State);
+      if (D.a) done(async () => { await api('approve', { id: rows[D.a]['Teacher ID'], state: rows[D.a].State }); re(); }, 'Teacher approved');
+      if (D.r && confirm('Reject ' + rows[D.r].Name + '?')) done(async () => { await api('reject', { id: rows[D.r]['Teacher ID'], state: rows[D.r].State }); re(); }, 'Submission rejected');
+    };
+  },
+  async import(el) {
+    el.insertAdjacentHTML('beforeend', pageHead('Import teachers (CSV)', 'Upload a CSV file of teachers. Each row is checked and added to the tab of its state in your Google Sheet.') + `<div class="card" style="max-width:760px">
+<div class="f"><label for="csv">CSV file</label><input type="file" id="csv" accept=".csv,text/csv"></div>
+<div class="f" style="margin-top:.8rem"><label>Add them as</label><div id="tg"></div></div>
+<p style="margin:.9rem 0">The first row of the file must contain these column names (the order does not matter; Teacher ID, Description, Consent and Consent Time may be left out):<br><small>${FIELDS.join(', ')}</small></p>
+<div class="acts"><button type="button" class="btn" id="go">Import</button></div>
+<p id="st" style="margin-top:.8rem"></p><div id="rep"></div></div>`);
+    const TG = dd($('#tg'), { items: ['Approved teachers (live straight away)', 'Submissions (review before they go live)'], single: true, ph: 'Choose' });
+    TG.put(['Approved teachers (live straight away)']);
+    $('#go').onclick = async () => {
+      const f = $('#csv').files[0]; if (!f) return toast('Choose a CSV file first');
+      const rows = parseCSV(await f.text());
+      if (rows.length < 2) return toast('The file has no data rows');
+      const head = rows[0].map(h => h.trim().toLowerCase());
+      const idx = {}; FIELDS.forEach(h => { idx[h] = head.indexOf(h.toLowerCase()); });
+      const need = FIELDS.filter(h => !['Teacher ID', 'Description', 'Consent', 'Consent Time'].includes(h) && idx[h] < 0);
+      if (need.length) return toast('Missing column(s): ' + need.join(', '));
+      const data = rows.slice(1).map(r => { const o = {}; FIELDS.forEach(h => { o[h] = idx[h] >= 0 ? (r[idx[h]] || '').trim() : ''; }); return o; });
+      const target = TG.get()[0].startsWith('Submissions') ? 'submissions' : 'teachers';
+      $('#go').disabled = true; $('#rep').innerHTML = '';
+      let added = 0; const skipped = [];
+      try {
+        for (let i = 0; i < data.length; i += 500) {
+          $('#st').textContent = `Importing… ${Math.min(i + 500, data.length)} of ${data.length} rows`;
+          const r = await api('importRows', { target, offset: i, rows: data.slice(i, i + 500) });
+          added += r.added; skipped.push(...r.skipped);
+        }
+        $('#st').textContent = `Done. ${added} added, ${skipped.length} skipped (of ${data.length} rows).`;
+      } catch (e) { $('#st').textContent = `Stopped: ${e.message}. ${added} rows were added before the problem; run the import again to continue (rows already added are skipped as duplicates only if they have a Teacher ID).`; }
+      $('#rep').innerHTML = skipped.length ? `<p><b>Skipped rows</b> (row 2 is the first data row)</p><div style="max-height:260px;overflow:auto"><ul>${skipped.slice(0, 300).map(x => `<li>Row ${x.line}: ${esc(x.reason)}</li>`).join('')}</ul></div>${skipped.length > 300 ? `<p>…and ${skipped.length - 300} more.</p>` : ''}` : '';
+      $('#go').disabled = false;
+    };
+  },
+  async locations(el) {
+    el.insertAdjacentHTML('beforeend', pageHead('Locations tool', 'Turn one CSV file of locations into the per-state files used by the website.') + `<div class="card" style="max-width:760px">
+<p style="margin-bottom:.8rem">Upload a CSV with the columns <b>State</b>, <b>City</b> and <b>Zone/Sector/Village</b> (one area per row). The tool builds one file per state. Download the ZIP, unzip it, and upload the <b>locations</b> folder to Cloudflare Pages (replace the old files). Only states that appear in your CSV get a file.</p>
+<div class="f"><label for="lcsv">CSV file</label><input type="file" id="lcsv" accept=".csv,text/csv"></div>
+<label style="display:block;margin:.9rem 0"><input type="checkbox" id="mg" checked> Keep the cities and areas already on the website (recommended). Untick to replace a state completely.</label>
+<div class="acts"><button type="button" class="btn" id="lb">Build files</button><button type="button" class="btn alt" id="dz" style="display:none">Download ZIP</button></div>
+<p id="lst" style="margin-top:.8rem"></p><div id="lrep"></div></div>`);
+    let zip = null;
+    $('#dz').onclick = () => { const a = document.createElement('a'); a.href = URL.createObjectURL(zip); a.download = 'locations.zip'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 5000); };
+    $('#lb').onclick = async () => {
+      const f = $('#lcsv').files[0]; if (!f) return toast('Choose a CSV file first');
+      const rows = parseCSV(await f.text());
+      if (rows.length < 2) return toast('The file has no data rows');
+      const head = rows[0].map(h => h.trim().toLowerCase());
+      const col = (...n) => head.findIndex(h => n.includes(h));
+      const iS = col('state'), iC = col('city'), iZ = col('zone/sector/village', 'zone', 'area', 'sector', 'village');
+      if (iS < 0 || iC < 0 || iZ < 0) return toast('The first row must contain: State, City, Zone/Sector/Village');
+      const clean = x => String(x || '').replace(/\s+/g, ' ').trim();
+      const by = {}, skipped = []; let used = 0;
+      rows.slice(1).forEach((r, n) => {
+        const st = matchState(r[iS]), c = clean(r[iC]), z = clean(r[iZ]);
+        if (!st) return skipped.push(`Row ${n + 2}: unknown state '${clean(r[iS])}'`);
+        if (!c || !z) return skipped.push(`Row ${n + 2}: city or area is empty`);
+        ((by[st] = by[st] || {})[c] = by[st][c] || new Set()).add(z); used++;
+      });
+      $('#lb').disabled = true; $('#lst').textContent = 'Building…';
+      const files = [], summary = [];
+      for (const st of STATES.filter(s => by[s])) {
+        const data = {};
+        if ($('#mg').checked) { try { const old = await loadStateFile(st, true); Object.keys(old).forEach(c => { data[c] = new Set(old[c]); }); } catch (_) { /* no file yet */ } }
+        Object.keys(by[st]).forEach(c => { data[c] = data[c] || new Set(); by[st][c].forEach(z => data[c].add(z)); });
+        const sorted = {}; Object.keys(data).sort((a, b) => a.localeCompare(b)).forEach(c => { sorted[c] = [...data[c]].sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' })); });
+        files.push({ name: 'locations/' + stateSlug(st) + '.js', text: stateFileText(st, sorted) });
+        summary.push([esc(st), Object.keys(sorted).length, Object.values(sorted).reduce((n, a) => n + a.length, 0)]);
+      }
+      $('#lb').disabled = false;
+      if (!files.length) { $('#lst').textContent = 'No usable rows were found.'; $('#lrep').innerHTML = skipped.length ? `<ul>${skipped.slice(0, 200).map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : ''; return; }
+      zip = makeZip(files); $('#dz').style.display = '';
+      $('#lst').textContent = `Done: ${used} rows used, ${skipped.length} skipped. ${files.length} state file(s) are ready.`;
+      $('#lrep').innerHTML = table(['State', 'Cities', 'Areas'], summary) + (skipped.length ? `<p style="margin-top:.8rem"><b>Skipped rows</b></p><div style="max-height:220px;overflow:auto"><ul>${skipped.slice(0, 200).map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>` : '');
+    };
+  }
+};
+
+/* ----- Shell ----- */
+async function show(k) {
+  k = typeof k === 'string' && PAGES[k] ? k : 'dashboard'; CUR = k;
+  $$('#nav a').forEach(a => a.classList.toggle('on', a.hash === '#' + k));
+  const el = $('#main'); el.onclick = null;
+  el.innerHTML = '<p id="ld">Loading…</p>';
+  try { await PAGES[k](el); }
+  catch (e) { el.insertAdjacentHTML('beforeend', `<div class="card"><h2>Something went wrong</h2><p>${esc(e.message)}</p></div>`); }
+  $('#ld') && $('#ld').remove();
+  scrollTo(0, 0);
+}
+function go(k) { try { history.replaceState(null, '', '#' + k); } catch (_) {} show(k); }
+function signOut() { AUTH = false; TOKEN = ''; sessionStorage.removeItem('pa_t'); $('#login').style.display = 'grid'; }
+function enter() { AUTH = true; $('#login').style.display = 'none'; show(location.hash.slice(1)); }
+$('#nav').innerHTML = NAV.map(([k, l]) => `<a href="#${k}">${l}</a>`).join('');
+$('#out').onclick = async () => { try { await api('logout'); } catch (_) {} signOut(); };
+document.addEventListener('click', e => { const a = e.target.closest('#nav a'); if (!a) return; e.preventDefault(); go(a.hash.slice(1)); });
+addEventListener('hashchange', () => AUTH && show(location.hash.slice(1)));
+$('#lf').onsubmit = async e => {
+  e.preventDefault(); const pw = $('#pw').value; if (!pw) { $('#le').textContent = 'Enter a password.'; return; }
+  $('#le').textContent = 'Checking…';
+  try { const r = await api('login', { password: pw }); TOKEN = r.token; sessionStorage.setItem('pa_t', TOKEN); $('#le').textContent = ''; $('#pw').value = ''; enter(); }
+  catch (err) { $('#le').textContent = err.message; }
+};
+if (TOKEN) api('me').then(enter).catch(() => {});   // still signed in from earlier? skip the login screen
+</script>
+</body>
+</html>
