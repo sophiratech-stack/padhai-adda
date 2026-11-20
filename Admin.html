@@ -107,7 +107,7 @@ dl{display:grid;grid-template-columns:170px 1fr;gap:.5rem .8rem}dd{overflow-wrap
 
 <script src="/lists.js"></script>
 <script>
-const API = 'PASTE_YOUR_APPS_SCRIPT_URL_HERE';   // the Web app URL from Apps Script (Deploy > Manage deployments)
+const API = 'https://script.google.com/macros/s/AKfycby1HPkyo0TcFQwObaz7pOm-Vy5CYOi0l8OSY_9v-S891MNUNrzyV4H8PEkzENOx_eAC/exec';   // the Web app URL from Apps Script (Deploy > Manage deployments)
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 let AUTH = false, CUR = 'dashboard', TOKEN = sessionStorage.getItem('pa_t') || '';
